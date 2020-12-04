@@ -30,6 +30,8 @@ public class FlowManager : MonoBehaviour
         MenuManager.OnStartSingleplayerButtonPressed += StartSingleplayer;
         MenuManager.OnStartMultiplayerButtonPressed += StartMultiplayer;
         MenuManager.OnMenuButtonPressed += GoToMenu;
+        GameOverManager.OnBackToMenu += GoToMenu;
+        GameManager.OnGameFinished += GoToGameOver;
     }
 
     void ChangeScene(int sceneIndex)
@@ -40,6 +42,11 @@ public class FlowManager : MonoBehaviour
     private void GoToMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void GoToGameOver()
+    {
+        SceneManager.LoadScene(2);
     }
 
     private void StartSingleplayer()

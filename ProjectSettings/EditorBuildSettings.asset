@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/ESCENAS/conduccion9.unity
     guid: 6a990c81459e9b04c87adbbd2d639bbd
   - enabled: 1
-    path: Assets/ESCENAS/PtsFinal.unity
-    guid: 3fed48a553168ae458bbf014c512a5cd
+    path: Assets/ESCENAS/Game Over.unity
+    guid: f8fc16571b690c440853407510950e5f
   m_configObjects: {}

@@ -115,7 +115,7 @@ public class ControlDireccion : MonoBehaviour
                 break;
         }
 #endif
-#if UNITY_IOS || UNITY_ANDROID
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         if (Habilitado)
         {
             gameObject.SendMessage("SetGiro", Mathf.Clamp(joystick.Horizontal * joystickMultiplier, -2f, 2f));

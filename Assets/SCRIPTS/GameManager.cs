@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public float TiempoDeJuego = 60;
 
+    public static FlowManager.GameFlowEvent OnGameFinished;
 
     public bool testing = false;
     public enum Gamemode
@@ -103,7 +104,7 @@ public class GameManager : MonoBehaviour
         if (testing)
             currentGamemode = defaultGamemode;
 
-#if UNITY_IOS || UNITY_ANDROID
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         Player1DriveUI.SetActive(true);
 #endif
 
@@ -115,7 +116,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-#if UNITY_IOS || UNITY_ANDROID
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
             Player2DriveUI.SetActive(true);
 #endif 
         }
@@ -250,9 +251,9 @@ public class GameManager : MonoBehaviour
                 //nada de trakeo con kinect, solo se muestra el puntaje
                 //tambien se puede hacer alguna animacion, es el tiempo previo a la muestra de pts
 
-                TiempEspMuestraPts -= Time.deltaTime;
-                if (TiempEspMuestraPts <= 0)
-                    Application.LoadLevel(Application.loadedLevel + 1);
+                //TiempEspMuestraPts -= Time.deltaTime;
+                //if (TiempEspMuestraPts <= 0)
+                //    Application.LoadLevel(Application.loadedLevel + 1);
 
                 break;
         }
@@ -352,7 +353,7 @@ public class GameManager : MonoBehaviour
         Player2UnloadUI.SetActive(false);
 
         Player1.CambiarACalibracion();
-#if UNITY_STANDALONE //|| UNITY_EDITOR
+#if UNITY_STANDALONE || UNITY_EDITOR
         Player1CalibrationUI.SetActive(false);
 #endif
 #if UNITY_IOS || UNITY_ANDROID
@@ -360,7 +361,7 @@ public class GameManager : MonoBehaviour
 #endif
         if (currentGamemode == Gamemode.multiplayer)
         {
-#if UNITY_STANDALONE //|| UNITY_EDITOR
+#if UNITY_STANDALONE || UNITY_EDITOR
             Player2CalibrationUI.SetActive(false);
 #endif
 #if UNITY_IOS || UNITY_ANDROID
@@ -427,11 +428,11 @@ public class GameManager : MonoBehaviour
 
     void EmpezarCarrera()
     {
-#if UNITY_STANDALONE //|| UNITY_EDITOR
+#if UNITY_STANDALONE || UNITY_EDITOR
         Player1UnloadUI.SetActive(false);
         Player2UnloadUI.SetActive(false);
 #endif
-#if UNITY_IOS || UNITY_ANDROID
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         Player1UnloadUI.SetActive(true);
         Player2UnloadUI.SetActive(true);
 #endif
@@ -448,43 +449,50 @@ public class GameManager : MonoBehaviour
 
     void FinalizarCarrera()
     {
-        EstAct = GameManager.EstadoJuego.Finalizado;
+        //EstAct = GameManager.EstadoJuego.Finalizado;
 
-        TiempoDeJuego = 0;
+        //TiempoDeJuego = 0;
 
-        if (Player1.Dinero > Player2.Dinero)
-        {
-            //lado que gano
-            if (PlayerInfo1.LadoAct == Visualizacion.Lado.Der)
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
-            else
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
+        GameOverManager.result.gamemode = currentGamemode;
+        GameOverManager.result.p1Score = Player1.Dinero;
+        GameOverManager.result.p2Score = Player2.Dinero;
 
-            //puntajes
-            DatosPartida.PtsGanador = Player1.Dinero;
-            DatosPartida.PtsPerdedor = Player2.Dinero;
-        }
-        else
-        {
-            //lado que gano
-            if (PlayerInfo2.LadoAct == Visualizacion.Lado.Der)
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
-            else
-                DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
+        if(OnGameFinished!=null)
+            OnGameFinished.Invoke();
 
-            //puntajes
-            DatosPartida.PtsGanador = Player2.Dinero;
-            DatosPartida.PtsPerdedor = Player1.Dinero;
-        }
+        //if (Player1.Dinero > Player2.Dinero)
+        //{
+        //    //lado que gano
+        //    if (PlayerInfo1.LadoAct == Visualizacion.Lado.Der)
+        //        DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
+        //    else
+        //        DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
 
-        Player1.GetComponent<Frenado>().Frenar();
-        Player1.ContrDesc.FinDelJuego();
+        //    //puntajes
+        //    DatosPartida.PtsGanador = Player1.Dinero;
+        //    DatosPartida.PtsPerdedor = Player2.Dinero;
+        //}
+        //else
+        //{
+        //    //lado que gano
+        //    if (PlayerInfo2.LadoAct == Visualizacion.Lado.Der)
+        //        DatosPartida.LadoGanadaor = DatosPartida.Lados.Der;
+        //    else
+        //        DatosPartida.LadoGanadaor = DatosPartida.Lados.Izq;
 
-        if (currentGamemode == Gamemode.multiplayer)
-        {
-            Player2.GetComponent<Frenado>().Frenar();
-            Player2.ContrDesc.FinDelJuego();
-        }
+        //    //puntajes
+        //    DatosPartida.PtsGanador = Player2.Dinero;
+        //    DatosPartida.PtsPerdedor = Player1.Dinero;
+        //}
+
+        //Player1.GetComponent<Frenado>().Frenar();
+        //Player1.ContrDesc.FinDelJuego();
+
+        //if (currentGamemode == Gamemode.multiplayer)
+        //{
+        //    Player2.GetComponent<Frenado>().Frenar();
+        //    Player2.ContrDesc.FinDelJuego();
+        //}
 
     }
 
