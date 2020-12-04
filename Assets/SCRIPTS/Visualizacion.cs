@@ -102,14 +102,23 @@ public class Visualizacion : MonoBehaviour
 		Direccion = GetComponent<ControlDireccion>();
 		Pj = GetComponent<Player>();
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
-	
-	void OnGUI()
+
+    public void Deactivate()
+    {
+        CamCalibracion.gameObject.SetActive(false);
+        CamConduccion.gameObject.SetActive(false);
+        CamDescarga.gameObject.SetActive(false);
+    }
+
+    public void UpgradeToFullscreen()
+    {
+        Rect fullscreenRect = new Rect(0f,0f,1f,1f);
+        CamCalibracion.rect = fullscreenRect;
+        CamConduccion.rect = fullscreenRect;
+        CamDescarga.rect = fullscreenRect;
+    }
+
+    void OnGUI()
 	{	
 		switch(Pj.EstAct)
 		{
@@ -158,14 +167,14 @@ public class Visualizacion : MonoBehaviour
 		CamCalibracion.enabled = true;
 		CamConduccion.enabled = false;
 		CamDescarga.enabled = false;
-	}
+    }
 	
 	public void CambiarATutorial()
 	{
 		CamCalibracion.enabled = false;
 		CamConduccion.enabled = true;
 		CamDescarga.enabled = false;
-	}
+    }
 	
 	public void CambiarAConduccion()
 	{

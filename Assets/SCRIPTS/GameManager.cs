@@ -8,18 +8,34 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instancia;
 	
 	public float TiempoDeJuego = 60;
-	
+
+
+    public bool testing = false;
+    public enum Gamemode
+    {
+        singleplayer, multiplayer
+    }
+
+    public static Gamemode currentGamemode;
+    public Gamemode defaultGamemode;
+
 	public enum EstadoJuego{Calibrando, Jugando, Finalizado}
 	public EstadoJuego EstAct = EstadoJuego.Calibrando;
 	
 	public PlayerInfo PlayerInfo1 = null;
 	public PlayerInfo PlayerInfo2 = null;
-	
-	public Player Player1;
+
+    //public GameObject PlayerPrefab;
+
+    public Player Player1;
 	public Player Player2;
-	
-	//mueve los esqueletos para usar siempre los mismos
-	public Transform Esqueleto1;
+
+    //public Transform p1SpawnPoint;
+    //public Transform p2SpawnPoint;
+
+
+    //mueve los esqueletos para usar siempre los mismos
+    public Transform Esqueleto1;
 	public Transform Esqueleto2;
 	//public Vector3[] PosEsqsCalib;
 	public Vector3[] PosEsqsCarrera;
@@ -65,8 +81,8 @@ public class GameManager : MonoBehaviour
 	public float DistanciaRecorrida = 0;
 	public float TiempoTranscurrido = 0;
 	*/
-	
-	IList<int> users;
+
+    IList<int> users;
 	
 	//--------------------------------------------------------//
 	
@@ -76,9 +92,21 @@ public class GameManager : MonoBehaviour
 	}
 	
 	void Start()
-	{
-		IniciarCalibracion();
+    {
+        if (testing)
+            currentGamemode = defaultGamemode;
+
+        if (currentGamemode == Gamemode.singleplayer)
+        {
+            Player1.transform.GetComponent<Visualizacion>().UpgradeToFullscreen();
+            Player2.transform.GetComponent<Visualizacion>().Deactivate();
+            Player2.gameObject.SetActive(false);
+        }
+
+
+        IniciarCalibracion();
 		
+
 		//para testing
 		//PosCamionesCarrera[0].x+=100;
 		//PosCamionesCarrera[1].x+=100;
@@ -124,17 +152,17 @@ public class GameManager : MonoBehaviour
                     SetPosicion(PlayerInfo1);
                 }
 
-                if (PlayerInfo2.PJ == null && Input.GetKeyDown(KeyCode.UpArrow)) {
+                if (PlayerInfo2.PJ == null && Input.GetKeyDown(KeyCode.UpArrow) || PlayerInfo2.PJ == null && currentGamemode == Gamemode.singleplayer) {
                     PlayerInfo2 = new PlayerInfo(1, Player2);
                     PlayerInfo2.LadoAct = Visualizacion.Lado.Der;
                     SetPosicion(PlayerInfo2);
                 }
-			
-			//cuando los 2 pj terminaron los tutoriales empiesa la carrera
-			if(PlayerInfo1.PJ != null && PlayerInfo2.PJ != null)
+
+                //cuando los 2 pj terminaron los tutoriales empiesa la carrera
+                if (PlayerInfo1.PJ != null && PlayerInfo2.PJ != null || PlayerInfo1.PJ != null && currentGamemode == Gamemode.singleplayer)
 			{
-				if(PlayerInfo1.FinTuto2 && PlayerInfo2.FinTuto2)
-				{
+				if(PlayerInfo1.FinTuto2 && PlayerInfo2.FinTuto2 || PlayerInfo1.FinTuto2 && currentGamemode == Gamemode.singleplayer)
+                    {
 					EmpezarCarrera();
 				}
 			}
@@ -269,7 +297,11 @@ public class GameManager : MonoBehaviour
 		
 		
 		Player1.CambiarACalibracion();
-		Player2.CambiarACalibracion();
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.CambiarACalibracion();
+        }
+
 	}
 		
 	/*
@@ -315,19 +347,28 @@ public class GameManager : MonoBehaviour
 		{
 			ObjsTuto2[i].SetActiveRecursively(true);
 		}
-		Player2.GetComponent<Frenado>().Frenar();
-		Player2.gameObject.transform.position = PosCamion2Tuto;
-		Player2.CambiarATutorial();
-		Player2.transform.forward = Vector3 .forward;
-	}
+
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.GetComponent<Frenado>().Frenar();
+            Player2.gameObject.transform.position = PosCamion2Tuto;
+            Player2.CambiarATutorial();
+            Player2.transform.forward = Vector3.forward;
+        }
+
+    }
 	
 	void EmpezarCarrera()
 	{
 		Player1.GetComponent<Frenado>().RestaurarVel();
 		Player1.GetComponent<ControlDireccion>().Habilitado = true;
-			
-		Player2.GetComponent<Frenado>().RestaurarVel();
-		Player2.GetComponent<ControlDireccion>().Habilitado = true;
+
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.GetComponent<Frenado>().RestaurarVel();
+            Player2.GetComponent<ControlDireccion>().Habilitado = true;
+        }
+
 	}
 	
 	void FinalizarCarrera()
@@ -362,10 +403,14 @@ public class GameManager : MonoBehaviour
 		}
 		
 		Player1.GetComponent<Frenado>().Frenar();
-		Player2.GetComponent<Frenado>().Frenar();
-		
 		Player1.ContrDesc.FinDelJuego();
-		Player2.ContrDesc.FinDelJuego();
+
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.GetComponent<Frenado>().Frenar();
+            Player2.ContrDesc.FinDelJuego();
+        }
+
 	}
 	
 	/*
@@ -474,22 +519,29 @@ public class GameManager : MonoBehaviour
 		Player1.transform.forward = Vector3 .forward;
 		Player1.GetComponent<Frenado>().Frenar();
 		Player1.CambiarAConduccion();
-			
-		Player2.transform.forward = Vector3 .forward;
-		Player2.GetComponent<Frenado>().Frenar();
-		Player2.CambiarAConduccion();
+
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.transform.forward = Vector3.forward;
+            Player2.GetComponent<Frenado>().Frenar();
+            Player2.CambiarAConduccion();
+        }
+
 		
 		//los deja andando
-		Player1.GetComponent<Frenado>().RestaurarVel();
-		Player2.GetComponent<Frenado>().RestaurarVel();
 		//cancela la direccion
-		Player1.GetComponent<ControlDireccion>().Habilitado = false;
-		Player2.GetComponent<ControlDireccion>().Habilitado = false;
 		//les de direccion
+		Player1.GetComponent<Frenado>().RestaurarVel();
+		Player1.GetComponent<ControlDireccion>().Habilitado = false;
 		Player1.transform.forward = Vector3.forward;
-		Player2.transform.forward = Vector3.forward;
-		
-		EstAct = GameManager.EstadoJuego.Jugando;
+
+        if (currentGamemode == Gamemode.multiplayer)
+        {
+            Player2.GetComponent<Frenado>().RestaurarVel();
+            Player2.GetComponent<ControlDireccion>().Habilitado = false;
+            Player2.transform.forward = Vector3.forward;
+        }
+        EstAct = GameManager.EstadoJuego.Jugando;
 	}
 	
 	public void FinTutorial(int playerID)
@@ -497,8 +549,10 @@ public class GameManager : MonoBehaviour
 		if(playerID == 0)
 		{
 			PlayerInfo1.FinTuto2 = true;
-			
-		}else if(playerID == 1)
+            if(currentGamemode == Gamemode.singleplayer)
+                PlayerInfo2.FinTuto2 = true;
+        }
+        else if(playerID == 1 && currentGamemode == Gamemode.multiplayer)
 		{
 			PlayerInfo2.FinTuto2 = true;
 		}
@@ -514,8 +568,10 @@ public class GameManager : MonoBehaviour
 		if(playerID == 0)
 		{
 			PlayerInfo1.FinTuto1 = true;
-			
-		}else if(playerID == 1)
+            if (currentGamemode == Gamemode.singleplayer)
+                PlayerInfo2.FinTuto1 = true;
+        }
+        else if(playerID == 1 && currentGamemode == Gamemode.multiplayer)
 		{
 			PlayerInfo2.FinTuto1 = true;
 		}

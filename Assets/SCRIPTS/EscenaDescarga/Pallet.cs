@@ -40,9 +40,7 @@ public class Pallet : MonoBehaviour
 				}
 				else
 				{
-					print("smoot");
-					
-					if(Portador.GetComponent<ManoRecept>() != null)
+                    if(Portador.GetComponent<ManoRecept>() != null)
 						transform.position = Portador.transform.position - Vector3.up * 1.2f;
 					else
 						transform.position = Vector3.Lerp(transform.position, Portador.transform.position, T.GetDT() * 10);
@@ -51,9 +49,7 @@ public class Pallet : MonoBehaviour
 			}
 			else
 			{
-				print("crudo");
-				
-				if(Portador.GetComponent<ManoRecept>() != null)
+                if(Portador.GetComponent<ManoRecept>() != null)
 					transform.position = Portador.transform.position - Vector3.up * 1.2f;
 				else
 					transform.position = Portador.transform.position;

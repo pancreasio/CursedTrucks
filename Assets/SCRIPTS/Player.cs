@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
 	
 	public void CambiarACalibracion()
 	{
-		MiVisualizacion.CambiarACalibracion();
+        MiVisualizacion.CambiarACalibracion();
 		EstAct = Player.Estados.EnCalibracion;
 	}
 	
