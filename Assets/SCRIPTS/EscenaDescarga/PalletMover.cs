@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PalletMover : ManejoPallets {
+public class PalletMover : ManejoPallets
+{
+
+    public GameObject firstStepUI;
+    public GameObject secondStepUI;
+    public GameObject thirdStepUI;
 
     public MoveType miInput;
     public enum MoveType {
@@ -12,6 +17,13 @@ public class PalletMover : ManejoPallets {
 
     public ManejoPallets Desde, Hasta;
     bool segundoCompleto = false;
+
+    private void Start()
+    {
+        firstStepUI.SetActive(true);
+        secondStepUI.SetActive(false);
+        thirdStepUI.SetActive(false);
+    }
 
     private void Update() {
         switch (miInput) {
@@ -53,6 +65,40 @@ public class PalletMover : ManejoPallets {
     void TercerPaso() {
         Dar(Hasta);
         segundoCompleto = false;
+    }
+
+    public void FirstStep()
+    {
+        if (!Tenencia() && Desde.Tenencia())
+        {
+            firstStepUI.SetActive(false);
+            secondStepUI.SetActive(true);
+            thirdStepUI.SetActive(false);
+            PrimerPaso();
+        }
+    }
+
+    public void SecondStep()
+    {
+        if (Tenencia())
+        {
+            firstStepUI.SetActive(false);
+            secondStepUI.SetActive(false);
+            thirdStepUI.SetActive(true);
+            SegundoPaso();
+        }
+    }
+
+    public void ThirdStep()
+    {
+        if (segundoCompleto && Tenencia())
+        {
+            firstStepUI.SetActive(true);
+            secondStepUI.SetActive(false);
+            thirdStepUI.SetActive(false);
+            SegundoPaso();
+            TercerPaso();
+        }
     }
 
     public override void Dar(ManejoPallets receptor) {
