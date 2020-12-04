@@ -18,7 +18,16 @@ public class GameManager : MonoBehaviour
     }
 
     public static Gamemode currentGamemode;
+
+    public enum Difficulty
+    {
+        hardMode,easyMode
+    }
+
+    public static Difficulty currentDifficulty;
+
     public Gamemode defaultGamemode;
+    public Difficulty defaultDifficulty;
 
     public enum EstadoJuego { Calibrando, Jugando, Finalizado }
     public EstadoJuego EstAct = EstadoJuego.Calibrando;
@@ -77,6 +86,10 @@ public class GameManager : MonoBehaviour
     public GameObject[] ObjsTuto2;
     //la pista de carreras
     public GameObject[] ObjsCarrera;
+
+    public GameObject hardOnlyBags;
+    public GameObject boxObstacles;
+    public GameObject normalBags;
     //de las descargas se encarga el controlador de descargas
 
     //para saber que el los ultimos 5 o 10 segs se cambie de tamaño la font del tiempo
@@ -102,7 +115,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if (testing)
+        {
             currentGamemode = defaultGamemode;
+            currentDifficulty = defaultDifficulty;
+        }
 
 #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         Player1DriveUI.SetActive(true);
@@ -345,7 +361,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < ObjsCarrera.Length; i++)
         {
-            ObjsCarrera[i].SetActiveRecursively(false);
+            ObjsCarrera[i].SetActive(false);
         }
 
 
@@ -547,8 +563,17 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < ObjsCarrera.Length; i++)
         {
-            ObjsCarrera[i].SetActiveRecursively(true);
+            ObjsCarrera[i].SetActive(true);
+            //difficulty spike
         }
+
+        normalBags.SetActive(true);
+        if (currentDifficulty == Difficulty.easyMode)
+        {
+            hardOnlyBags.SetActive(false);
+            boxObstacles.SetActive(false);
+        }
+
 
         /*
 		for(int i = 0; i < ObjsTuto1.Length; i++)

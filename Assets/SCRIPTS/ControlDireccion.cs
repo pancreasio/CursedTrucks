@@ -118,7 +118,7 @@ public class ControlDireccion : MonoBehaviour
 #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         if (Habilitado)
         {
-            gameObject.SendMessage("SetGiro", Mathf.Clamp(joystick.Horizontal * joystickMultiplier, -2f, 2f));
+            gameObject.SendMessage("SetGiro", joystick.Horizontal);
         }
 #endif
     }

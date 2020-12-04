@@ -13,11 +13,14 @@ public class MenuManager : MonoBehaviour
     public GameObject MenuUI;
     public GameObject CreditsUI;
 
+    public GameObject hardButton;
+    public GameObject easyButton;
 
     private void Start()
     {
         CreditsUI.SetActive(false);
         MenuUI.SetActive(true);
+        ChangeToHardMode();
     }
 
     public void GoToMenu()
@@ -41,6 +44,20 @@ public class MenuManager : MonoBehaviour
     {
         if (OnStartMultiplayerButtonPressed != null)
             OnStartMultiplayerButtonPressed.Invoke();
+    }
+
+    public void ChangeToHardMode()
+    {
+        hardButton.SetActive(false);
+        easyButton.SetActive(true);
+        GameManager.currentDifficulty = GameManager.Difficulty.hardMode;
+    }
+
+    public void ChangeToEasyMode()
+    {
+        hardButton.SetActive(true);
+        easyButton.SetActive(false);
+        GameManager.currentDifficulty = GameManager.Difficulty.easyMode;
     }
 
     public void ShowCredits()
