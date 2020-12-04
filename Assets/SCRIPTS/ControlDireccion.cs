@@ -13,6 +13,7 @@ public class ControlDireccion : MonoBehaviour
 	public float DesSencibilidad = 90;
 
     public Joystick joystick;
+    public float joystickMultiplier;
 
 	float Giro = 0;
 	
@@ -117,7 +118,7 @@ public class ControlDireccion : MonoBehaviour
 #if UNITY_IOS || UNITY_ANDROID
         if (Habilitado)
         {
-            gameObject.SendMessage("SetGiro", joystick.Horizontal);
+            gameObject.SendMessage("SetGiro", Mathf.Clamp(joystick.Horizontal * joystickMultiplier, -2f, 2f));
         }
 #endif
     }
