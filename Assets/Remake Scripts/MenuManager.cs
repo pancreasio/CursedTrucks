@@ -10,6 +10,16 @@ public class MenuManager : MonoBehaviour
     public static event FlowManager.GameFlowEvent OnStartSingleplayerButtonPressed;
     public static event FlowManager.GameFlowEvent OnStartMultiplayerButtonPressed;
 
+    public GameObject MenuUI;
+    public GameObject CreditsUI;
+
+
+    private void Start()
+    {
+        CreditsUI.SetActive(false);
+        MenuUI.SetActive(true);
+    }
+
     public void GoToMenu()
     {
         if (OnMenuButtonPressed != null)
@@ -31,6 +41,18 @@ public class MenuManager : MonoBehaviour
     {
         if (OnStartMultiplayerButtonPressed != null)
             OnStartMultiplayerButtonPressed.Invoke();
+    }
+
+    public void ShowCredits()
+    {
+        CreditsUI.SetActive(true);
+        MenuUI.SetActive(false);
+    }
+
+    public void ShowMenu()
+    {
+        CreditsUI.SetActive(false);
+        MenuUI.SetActive(true);
     }
 }
 
