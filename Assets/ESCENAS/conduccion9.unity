@@ -100788,8 +100788,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TiempoDeJuego: 60
-  testing: 1
-  defaultGamemode: 1
+  testing: 0
+  defaultGamemode: 0
   EstAct: 0
   PlayerInfo1:
     FinCalibrado: 0
