@@ -32,12 +32,14 @@ public class GameManager : MonoBehaviour
     public GameObject Player1CalibrationStartUI;
     public GameObject Player1CalibrationUnloadUI;
     public GameObject Player1UnloadUI;
+    public GameObject Player1DriveUI;
 
 
     public GameObject Player2CalibrationUI;
     public GameObject Player2CalibrationStartUI;
     public GameObject Player2CalibrationUnloadUI;
     public GameObject Player2UnloadUI;
+    public GameObject Player2DriveUI;
 
     //mueve los esqueletos para usar siempre los mismos
     public Transform Esqueleto1;
@@ -101,11 +103,21 @@ public class GameManager : MonoBehaviour
         if (testing)
             currentGamemode = defaultGamemode;
 
+#if UNITY_IOS || UNITY_ANDROID
+        Player1DriveUI.SetActive(true);
+#endif
+
         if (currentGamemode == Gamemode.singleplayer)
         {
             Player1.transform.GetComponent<Visualizacion>().UpgradeToFullscreen();
             Player2.transform.GetComponent<Visualizacion>().Deactivate();
             Player2.gameObject.SetActive(false);
+        }
+        else
+        {
+#if UNITY_IOS || UNITY_ANDROID
+            Player2DriveUI.SetActive(true);
+#endif 
         }
 
 

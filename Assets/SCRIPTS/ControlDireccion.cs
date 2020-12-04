@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ControlDireccion : MonoBehaviour 
 {
-	public enum TipoInput {Mouse, Kinect, AWSD, Arrows}
+	public enum TipoInput {Mouse, Kinect, AWSD, Arrows,}
 	public TipoInput InputAct = ControlDireccion.TipoInput.Mouse;
 
 	public Transform ManoDer;
@@ -11,7 +11,9 @@ public class ControlDireccion : MonoBehaviour
 	
 	public float MaxAng = 90;
 	public float DesSencibilidad = 90;
-	
+
+    public Joystick joystick;
+
 	float Giro = 0;
 	
 	public enum Sentido {Der, Izq}
@@ -31,7 +33,8 @@ public class ControlDireccion : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		switch(InputAct)
+#if UNITY_STANDALONE || UNITY_EDITOR
+        switch(InputAct)
 		{
 		case TipoInput.Mouse:
 			if(Habilitado) 
@@ -107,11 +110,31 @@ public class ControlDireccion : MonoBehaviour
                         gameObject.SendMessage("SetGiro", 1);
                     }
                 }
-                break;
-        }		
-	}
 
-	public float GetGiro()
+                break;
+        }
+#endif
+#if UNITY_IOS || UNITY_ANDROID
+        if (Habilitado)
+        {
+            gameObject.SendMessage("SetGiro", joystick.Horizontal);
+        }
+#endif
+    }
+
+    public void TurnLeft()
+    {
+        if(Habilitado)
+            gameObject.SendMessage("SetGiro", -1);
+    }
+
+    public void TurnRight()
+    {
+        if (Habilitado)
+            gameObject.SendMessage("SetGiro", 1);
+    }
+
+    public float GetGiro()
 	{
 		/*
 		switch(DirAct)
