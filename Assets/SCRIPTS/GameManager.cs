@@ -31,11 +31,13 @@ public class GameManager : MonoBehaviour
     public GameObject Player1CalibrationUI;
     public GameObject Player1CalibrationStartUI;
     public GameObject Player1CalibrationUnloadUI;
+    public GameObject Player1UnloadUI;
 
 
     public GameObject Player2CalibrationUI;
     public GameObject Player2CalibrationStartUI;
     public GameObject Player2CalibrationUnloadUI;
+    public GameObject Player2UnloadUI;
 
     //mueve los esqueletos para usar siempre los mismos
     public Transform Esqueleto1;
@@ -334,8 +336,11 @@ public class GameManager : MonoBehaviour
         }
 
 
+        Player1UnloadUI.SetActive(false);
+        Player2UnloadUI.SetActive(false);
+
         Player1.CambiarACalibracion();
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE //|| UNITY_EDITOR
         Player1CalibrationUI.SetActive(false);
 #endif
 #if UNITY_IOS || UNITY_ANDROID
@@ -343,7 +348,7 @@ public class GameManager : MonoBehaviour
 #endif
         if (currentGamemode == Gamemode.multiplayer)
         {
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE //|| UNITY_EDITOR
             Player2CalibrationUI.SetActive(false);
 #endif
 #if UNITY_IOS || UNITY_ANDROID
@@ -410,6 +415,14 @@ public class GameManager : MonoBehaviour
 
     void EmpezarCarrera()
     {
+#if UNITY_STANDALONE //|| UNITY_EDITOR
+        Player1UnloadUI.SetActive(false);
+        Player2UnloadUI.SetActive(false);
+#endif
+#if UNITY_IOS || UNITY_ANDROID
+        Player1UnloadUI.SetActive(true);
+        Player2UnloadUI.SetActive(true);
+#endif
         Player1.GetComponent<Frenado>().RestaurarVel();
         Player1.GetComponent<ControlDireccion>().Habilitado = true;
 

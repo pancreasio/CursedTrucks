@@ -130,7 +130,7 @@ public class Visualizacion : MonoBehaviour
 			//contador de dinero
 			SetDinero();
 			//el volante
-			SetVolante();
+			//SetVolante();
 			break;
 			
 			
@@ -153,7 +153,7 @@ public class Visualizacion : MonoBehaviour
 		case Player.Estados.EnTutorial:
 			SetInv3();
 			SetTuto();
-			SetVolante();
+			//SetVolante();
 			break;
 		}
 		
@@ -394,30 +394,30 @@ public class Visualizacion : MonoBehaviour
 	}
 	*/
 	
-	void SetVolante()
-	{
-		GUI.skin = GS_Volante;
+	//void SetVolante()
+	//{
+	//	GUI.skin = GS_Volante;
 		
-		R.width = VolanteEsc * Screen.width /100;
-		R.height = VolanteEsc * Screen.width /100;
-		R.x = VolantePos[0].x *Screen.width /100;
-		R.y = VolantePos[0].y *Screen.height /100;
+	//	R.width = VolanteEsc * Screen.width /100;
+	//	R.height = VolanteEsc * Screen.width /100;
+	//	R.x = VolantePos[0].x *Screen.width /100;
+	//	R.y = VolantePos[0].y *Screen.height /100;
 		
-		if(LadoAct == Visualizacion.Lado.Der)
-			R.x = VolantePos[1].x *Screen.width /100;
-			//R.x = (Screen.width) - ((Screen.width/2) - R.x);
+	//	if(LadoAct == Visualizacion.Lado.Der)
+	//		R.x = VolantePos[1].x *Screen.width /100;
+	//		//R.x = (Screen.width) - ((Screen.width/2) - R.x);
 		
-		Vector2 centro;
-		centro.x = R.x + R.width/2;
-		centro.y = R.y + R.height/2;
-		float angulo = 100 * Direccion.GetGiro();
+	//	Vector2 centro;
+	//	centro.x = R.x + R.width/2;
+	//	centro.y = R.y + R.height/2;
+	//	float angulo = 100 * Direccion.GetGiro();
 		
-		GUIUtility.RotateAroundPivot(angulo, centro);
+	//	GUIUtility.RotateAroundPivot(angulo, centro);
 				
-		GUI.Box(R,"");
+	//	GUI.Box(R,"");
 		
-		GUIUtility.RotateAroundPivot(angulo*(-1), centro);
-	}
+	//	GUIUtility.RotateAroundPivot(angulo*(-1), centro);
+	//}
 	
 	void SetInv2()
 	{

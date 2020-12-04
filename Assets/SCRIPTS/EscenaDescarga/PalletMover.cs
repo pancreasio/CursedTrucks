@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PalletMover : ManejoPallets
 {
-
     public GameObject firstStepUI;
     public GameObject secondStepUI;
     public GameObject thirdStepUI;
@@ -67,6 +66,8 @@ public class PalletMover : ManejoPallets
         segundoCompleto = false;
     }
 
+
+
     public void FirstStep()
     {
         if (!Tenencia() && Desde.Tenencia())
@@ -99,6 +100,20 @@ public class PalletMover : ManejoPallets
             SegundoPaso();
             TercerPaso();
         }
+    }
+
+    public void ResetUI()
+    {
+        firstStepUI.SetActive(true);
+        secondStepUI.SetActive(false);
+        thirdStepUI.SetActive(false);
+    }
+
+    public void DeactivateUI()
+    {
+        firstStepUI.SetActive(false);
+        secondStepUI.SetActive(false);
+        thirdStepUI.SetActive(false);
     }
 
     public override void Dar(ManejoPallets receptor) {

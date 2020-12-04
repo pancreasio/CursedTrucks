@@ -24,6 +24,8 @@ public class ControladorDeDescarga : MonoBehaviour
 	public GameObject Pallet1;
 	public GameObject Pallet2;
 	public GameObject Pallet3;
+
+    public PalletMover palletMover;
 	
 	
 	public Estanteria Est1;
@@ -48,8 +50,7 @@ public class ControladorDeDescarga : MonoBehaviour
 		{
 			Componentes[i].SetActiveRecursively(false);
 		}
-		
-		CollCamion = Pj.GetComponentInChildren<MeshCollider>();
+        CollCamion = Pj.GetComponentInChildren<MeshCollider>();
 		Pj.SetContrDesc(this);
 		if(ObjAnimado != null)
 			ObjAnimado.ContrDesc = this;
@@ -71,9 +72,7 @@ public class ControladorDeDescarga : MonoBehaviour
 				Bonus = 0;
 			}		
 		}
-		
-		
-	}
+    }
 	
 	//--------------------------------------------------------------//
 			
@@ -81,7 +80,6 @@ public class ControladorDeDescarga : MonoBehaviour
 	{
 		Dep = d;//recibe el deposito para que sepa cuando dejarlo ir al camion
 		CamaraConduccion.SetActiveRecursively(false);//apaga la camara de conduccion
-			
 		//activa los componentes
 		for (int i = 0; i < Componentes.Length; i++)
 		{
@@ -94,8 +92,10 @@ public class ControladorDeDescarga : MonoBehaviour
 		
 		
 		GameObject go;
-		//asigna los pallets a las estanterias
-		for(int i = 0; i < Pj.Bolasas.Length; i++)
+        //asigna los pallets a las estanterias
+        palletMover.ResetUI();
+
+        for (int i = 0; i < Pj.Bolasas.Length; i++)
 		{
 			if(Pj.Bolasas[i] != null)
 			{
@@ -120,7 +120,7 @@ public class ControladorDeDescarga : MonoBehaviour
 				}
 			}
 		}
-		//animacion
+        //animacion
 		ObjAnimado.Entrar();
 		
 	}
@@ -166,7 +166,8 @@ public class ControladorDeDescarga : MonoBehaviour
 	
 	void Finalizacion()
 	{
-		ObjAnimado.Salir();
+        palletMover.DeactivateUI();
+        ObjAnimado.Salir();
 	}
 	
 	public Pallet GetPalletEnMov()
@@ -177,7 +178,7 @@ public class ControladorDeDescarga : MonoBehaviour
 	public void FinAnimEntrada()
 	{
 		//avisa cuando termino la animacion para que prosiga el juego
-		Est2.EncenderAnim();
+        Est2.EncenderAnim();
 	}
 	
 	public void FinAnimSalida()
